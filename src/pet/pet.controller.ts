@@ -7,10 +7,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreatePetDto } from './dtos/create-pet.dto';
 import { UpdatePetDto } from './dtos/update-pet.dto';
 import { PetService } from './pet.service';
 
+@ApiTags('pets')
 @Controller('pets')
 export class PetController {
   constructor(private petService: PetService) {}
