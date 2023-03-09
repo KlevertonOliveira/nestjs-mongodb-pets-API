@@ -9,8 +9,12 @@ import { UpdatePetDto } from './dtos/update-pet.dto';
 export class PetService {
   constructor(@InjectModel(Pet.name) private petModel: mongoose.Model<Pet>) {}
 
-  async findAll(): Promise<Pet[]> {
-    return await this.petModel.find();
+  async findAll(): Promise<{ total: number; pets: Pet[] }> {
+    const pets = await this.petModel.find();
+    return {
+      total: pets.length,
+      pets,
+    };
   }
 
   async create(pet: CreatePetDto): Promise<Pet> {
@@ -19,9 +23,7 @@ export class PetService {
 
   async findOne(id: string): Promise<Pet> {
     const pet = await this.petModel.findById(id);
-
     if (!pet) throw new NotFoundException('Pet not found');
-
     return pet;
   }
 
