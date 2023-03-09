@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Pet } from './schemas/pet.schema';
 import * as mongoose from 'mongoose';
 import { CreatePetDto } from './dtos/create-pet.dto';
+import { UpdatePetDto } from './dtos/update-pet.dto';
 
 @Injectable()
 export class PetService {
@@ -16,7 +17,7 @@ export class PetService {
     return await this.petModel.create(pet);
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Pet> {
     const pet = await this.petModel.findById(id);
 
     if (!pet) {
@@ -24,5 +25,14 @@ export class PetService {
     }
 
     return pet;
+  }
+
+  async update(id: string, updatePetDto: UpdatePetDto) {
+    await this.findOne(id);
+
+    return await this.petModel.findByIdAndUpdate(id, updatePetDto, {
+      new: true,
+      runValidators: true,
+    });
   }
 }
