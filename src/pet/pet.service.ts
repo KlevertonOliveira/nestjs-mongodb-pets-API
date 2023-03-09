@@ -20,19 +20,21 @@ export class PetService {
   async findOne(id: string): Promise<Pet> {
     const pet = await this.petModel.findById(id);
 
-    if (!pet) {
-      throw new NotFoundException('Pet not found');
-    }
+    if (!pet) throw new NotFoundException('Pet not found');
 
     return pet;
   }
 
-  async update(id: string, updatePetDto: UpdatePetDto) {
+  async update(id: string, updatePetDto: UpdatePetDto): Promise<Pet> {
     await this.findOne(id);
-
     return await this.petModel.findByIdAndUpdate(id, updatePetDto, {
       new: true,
       runValidators: true,
     });
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.findOne(id);
+    await this.petModel.findByIdAndDelete(id);
   }
 }
