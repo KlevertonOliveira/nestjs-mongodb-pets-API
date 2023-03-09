@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreatePetDto } from './dtos/create-pet.dto';
 import { PetService } from './pet.service';
 
@@ -21,5 +14,10 @@ export class PetController {
   @Post()
   async create(@Body() pet: CreatePetDto) {
     return this.petService.create(pet);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.petService.findOne(id);
   }
 }
